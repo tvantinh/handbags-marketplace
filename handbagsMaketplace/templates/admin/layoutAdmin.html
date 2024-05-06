@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> {% block title %} {% endblock %} </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}"
+          type="text/css">
+</head>
+<body>
+    <center>
+        <img src="{% static '/img/picture.png' %}" />
+    </center>
+    <div class="col-sm-2 bg-danger">
+        <div class="bs-sliderbar">
+            <ul class="nav flex-column">
+                <li><a href="/">Thông tin cá nhân</a></li>
+                <li><a href="/blog">Bài viết</a></li>
+                <li><a href="/contact">Thông tin Liên hệ</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-10">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer>
+        <a href="infor@hufi.edu.vn">Email: infor@hufi.edu.vn</a>
+        | <a href="#">Fanpage</a> | <a href="#">Tiktok</a>
+        | <a href="#">Google</a>
+    </footer>
+</body>
+</html>
