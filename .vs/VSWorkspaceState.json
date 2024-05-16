@@ -2,10 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\handbagsMaketplace",
+    "\\handbagsMaketplace\\migrations",
     "\\handbagsMaketplace\\templates",
-    "\\handbagsMaketplace\\templates\\admin",
     "\\nhom7"
   ],
-  "SelectedNode": "\\handbagsMaketplace\\templates\\admin\\layoutAdmin.html",
+  "SelectedNode": "\\handbagsMaketplace\\models.py",
   "PreviewInSolutionExplorer": false
 }
