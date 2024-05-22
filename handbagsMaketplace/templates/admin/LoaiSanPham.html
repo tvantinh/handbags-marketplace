@@ -1,0 +1,68 @@
+{% extends "admin/layoutAdmin.html" %} {% block title %} Home {% endblock %}
+{%block content %}
+<div class="container w-100" style="padding-top: 50px">
+  <h1 class="h1">danh sách các loại túi xách</h1>
+
+  <div class="row container">
+    <form action="">
+      <div>Nhập tên loại sản phẩm:</div>
+      <input class="title" type="text" value="" placeholder="Tên Loại" />
+      <input type="button" value="Tìm" />
+    </form>
+  </div>
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#myModal"
+  >
+    Thêm loại mới
+  </button>
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Thêm loại mới</h4>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <form action="/admin/LoaiSanPham" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <input type="submit" value="Thêm Loại" />
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark bg-secondary">
+      <tr>
+        <td>Mã Loại Sản Phẩm</td>
+        <td>Tên Loại</td>
+        <td></td>
+      </tr>
+    </thead>
+    {% for tl in handbagsMaketplace_DanhMuc %}
+    <tr>
+      <td>{{tl.MaDanhMuc}}</td>
+      <td>{{tl.TenDanhMuc}}</td>
+      <td>
+        <a href="#">xem sach theo theo loai</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

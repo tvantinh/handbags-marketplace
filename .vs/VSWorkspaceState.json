@@ -4,8 +4,9 @@
     "\\handbagsMaketplace",
     "\\handbagsMaketplace\\migrations",
     "\\handbagsMaketplace\\templates",
+    "\\handbagsMaketplace\\templates\\admin",
     "\\nhom7"
   ],
-  "SelectedNode": "\\handbagsMaketplace\\models.py",
+  "SelectedNode": "\\handbagsMaketplace\\views.py",
   "PreviewInSolutionExplorer": false
 }
