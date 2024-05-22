@@ -12,4 +12,3 @@ class DanhMucForm(forms.Form):
         raise forms.ValidationError("Danh mục đã tồn tại! ")
     def save(self):
         DanhMuc.objects.create(TenDanhMuc = self.cleaned_data['TenDanhMuc'])
-

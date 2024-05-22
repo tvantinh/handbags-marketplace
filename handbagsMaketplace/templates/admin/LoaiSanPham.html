@@ -31,7 +31,7 @@
         </div>
 
         <div class="modal-body">
-          <form action="/admin/LoaiSanPham" method="post">
+          <form action="/handbagsMaketplace/dsLoaiSanPham" method="post">
             {% csrf_token %} {{ form.as_p }}
             <input type="submit" value="Thêm Loại" />
           </form>
@@ -45,7 +45,7 @@
       </div>
     </div>
   </div>
-  <table class="table table-bordered table-hover">
+  <table class="table table-bordered table-hover ">
     <thead class="thead-dark bg-secondary">
       <tr>
         <td>Mã Loại Sản Phẩm</td>
@@ -55,7 +55,7 @@
     </thead>
     {% for tl in handbagsMaketplace_DanhMuc %}
     <tr>
-      <td>{{tl.MaDanhMuc}}</td>
+      <td>{{tl.id}}</td>
       <td>{{tl.TenDanhMuc}}</td>
       <td>
         <a href="#">xem sach theo theo loai</a>

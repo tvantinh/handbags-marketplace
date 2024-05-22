@@ -172,6 +172,7 @@
     </style>
   </head>
   <body>
+
     <div class="navbar text-white" style="background-color: #0e2238">
       <nav class="nav container-fluid">
         <div class="navbar-brand">
@@ -180,7 +181,7 @@
         <div class="nav-right"><span>Trang quản lí số 1 Việt Nam</span></div>
       </nav>
     </div>
-    <div class="wrapper h-100">
+    <div class="wrapper">
       <aside id="sidebar">
         <div class="d-flex">
           <button class="toggle-btn" type="button">
@@ -193,7 +194,7 @@
         <ul class="sidebar-nav">
           <li class="sidebar-item">
             <a href="#" class="sidebar-link">
-              <i class="lni lni-user"></i>
+              <i class="lni lni-stats-up"></i>
               <span>Thống Kê Doanh số</span>
             </a>
           </li>
@@ -276,13 +277,14 @@
               <i class="lni lni-cog"></i> <span>Tài Khoản Admin</span>
             </a>
           </li>
-        </ul>
-        <div class="sidebar-footer">
+          <div class="sidebar-footer">
           <a href="#" class="sidebar-link">
             <i class="lni lni-exit"></i>
             <span>Logout</span>
           </a>
         </div>
+        </ul>
+        
       </aside>
       <div>{% block content %} {% endblock %}</div>
     </div>
