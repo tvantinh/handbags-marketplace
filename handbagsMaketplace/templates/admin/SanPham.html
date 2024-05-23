@@ -1,6 +1,9 @@
+
+
+
 {% extends "admin/layoutAdmin.html" %} {% block title %} Home {% endblock %}
 {%block content %}
-
+{% load static %}
 <div class="container w-100" style="padding-top: 50px">
   <h1 class="h1">Danh sách các sản phẩm túi sách</h1>
 
@@ -37,7 +40,7 @@
           <td>{{sanpham.TenSanPham}}</td>
           <td>{{sanpham.MoTa}}</td>
           <td>{{sanpham.Gia}}</td>
-          <td>{{sanpham.HinhAnhDaiDien}}</td>
+          <td><img class="img-fluid" src="{% static 'img/' %}{{ sanpham.HinhAnhDaiDien }}"alt=""></td>
           <td>{{sanpham.NhanHieu}}</td>
           <td>{{sanpham.ChatLieu}}</td>
           <td>{{sanpham.MaDanhMuc_id}}</td>
@@ -108,7 +111,7 @@
       <td>{{tl.TenSanPham}}</td>
       <td>{{tl.MoTa}}</td>
       <td>{{tl.Gia}}</td>
-      <td>{{tl.HinhAnhDaiDien}}</td>
+      <td><img class="img-fluid" src="{% static 'img/' %}{{ tl.HinhAnhDaiDien }}"alt=""></td>
       <td>{{tl.NhanHieu}}</td>
       <td>{{tl.ChatLieu}}</td>
       <td>{{tl.MaDanhMuc_id}}</td>
