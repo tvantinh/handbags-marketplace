@@ -1,0 +1,32 @@
+<!-- templates/admin/danh_sach_khach_hang.html -->
+{% extends "admin/layoutAdmin.html" %}
+{% block title %}Danh sách khách hàng{% endblock %}
+{% block content %}
+<div class="container w-100" style="padding-top: 50px">
+  <h1 class="h1">Danh sách khách hàng</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark bg-secondary">
+      <tr>
+        <td>Mã Khách Hàng</td>
+        <td>Tên</td>
+        <td>Địa Chỉ</td>
+        <td>Số Điện Thoại</td>
+        <td>Email</td>
+        <td>Tên Đăng Nhập</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for kh in khach_hang_list %}
+      <tr>
+        <td>{{ kh.MaKhachHang }}</td>
+        <td>{{ kh.Ten }}</td>
+        <td>{{ kh.DiaChi }}</td>
+        <td>{{ kh.SoDienThoai }}</td>
+        <td>{{ kh.Email }}</td>
+        <td>{{ kh.TenDangNhap }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

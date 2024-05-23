@@ -1,5 +1,22 @@
+import os
 from django import forms # type: ignore
-from .models import DanhMuc,SanPham
+
+from nhom7 import settings # type: ignore
+from .models import DanhMuc,SanPham,KhachHang
+from django.core.files.storage import FileSystemStorage # type: ignore
+
+class DangNhapForm(forms.Form):
+    TenDangNhap = forms.CharField(max_length=100)
+    MatKhau = forms.CharField(widget=forms.PasswordInput)
+
+
+class DangKyForm(forms.ModelForm):
+    MatKhau = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = KhachHang
+        fields = ['Ten', 'DiaChi', 'SoDienThoai', 'Email', 'TenDangNhap', 'MatKhau']
+
 
 class DanhMucForm(forms.Form):
     TenDanhMuc = forms.CharField(label='Tên Danh Mục',max_length=100)
@@ -13,6 +30,8 @@ class DanhMucForm(forms.Form):
     def save(self):
         DanhMuc.objects.create(TenDanhMuc = self.cleaned_data['TenDanhMuc'])
 
+
+
 class SanPhamForm(forms.Form):
     MaDanhMuc = forms.ChoiceField(
         label='Mã danh mục',
@@ -21,8 +40,8 @@ class SanPhamForm(forms.Form):
     )
     TenSanPham = forms.CharField(label='Tên Sản Phẩm', max_length=100)
     MoTa = forms.CharField(label='Mô tả', max_length=100)
-    Gia = forms.CharField(label='Giá', max_length=100)
-    HinhAnhDaiDien = forms.CharField(label='Hình ảnh đại diện', max_length=100)
+    Gia = forms.DecimalField(label='Giá', max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    HinhAnhDaiDien = forms.ImageField(label='Hình ảnh đại diện', max_length=100)
     NhanHieu = forms.CharField(label='Nhãn hiệu', max_length=100)
     ChatLieu = forms.CharField(label='Chất liệu', max_length=100)
 
@@ -43,8 +62,11 @@ class SanPhamForm(forms.Form):
         nhanHieu = self.cleaned_data['NhanHieu']
         chatLieu = self.cleaned_data['ChatLieu']
 
-        danh_muc_instance = DanhMuc.objects.get(id=maDanhMuc)
+        danh_muc_instance = DanhMuc.objects.get(MaDanhMuc=maDanhMuc)
 
+        fs = FileSystemStorage(location=os.path.join(settings.BASE_DIR, 'static/img'))
+        filename = fs.save(hinhAnhDaiDien.name, hinhAnhDaiDien)
+        hinhAnhDaiDien_url = os.path.join('img', filename)
         # Tạo đối tượng SanPham và lưu vào cơ sở dữ liệu
         sanpham = SanPham.objects.create(
             TenSanPham=tenSanPham,
@@ -62,3 +84,26 @@ class SanPhamForm(forms.Form):
         self.fields['MaDanhMuc'].choices = [
             (dm.pk, dm.TenDanhMuc) for dm in DanhMuc.objects.all()
         ]
+
+
+class DanhMucForm(forms.ModelForm):
+    class Meta:
+        model = DanhMuc
+        fields = ['TenDanhMuc']
+        widgets = {
+            'TenDanhMuc': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class SanPhamForm(forms.ModelForm):
+    class Meta:
+        model = SanPham
+        fields = ['MaDanhMuc', 'TenSanPham', 'MoTa', 'Gia', 'HinhAnhDaiDien', 'NhanHieu', 'ChatLieu']
+        widgets = {
+            'MaDanhMuc': forms.Select(attrs={'class': 'form-control'}),
+            'TenSanPham': forms.TextInput(attrs={'class': 'form-control'}),
+            'MoTa': forms.TextInput(attrs={'class': 'form-control'}),
+            'Gia': forms.TextInput(attrs={'class': 'form-control'}),
+            'HinhAnhDaiDien': forms.FileInput(attrs={'class': 'form-control'}),
+            'NhanHieu': forms.TextInput(attrs={'class': 'form-control'}),
+            'ChatLieu': forms.TextInput(attrs={'class': 'form-control'}),
+        }

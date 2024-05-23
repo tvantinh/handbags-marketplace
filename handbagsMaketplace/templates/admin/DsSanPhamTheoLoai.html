@@ -1,0 +1,40 @@
+{% extends "admin/layoutAdmin.html" %} {% block title %} Home {% endblock %}
+{%block content %}
+
+<div class="container">
+  <h2 class="text-center">Sản Phẩm Theo Loại: {{ danh_muc.TenDanhMuc }}</h2>
+  <div class="table-wrapper">
+    <table class="table table-bordered table-hover product-table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Tên Sản Phẩm</th>
+          <th>Mô Tả</th>
+          <th>Giá</th>
+          <th>Nhãn Hiệu</th>
+          <th>Chất Liệu</th>
+          <th>Hình Ảnh</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for san_pham in san_pham_list %}
+        <tr>
+          <td>{{ san_pham.TenSanPham }}</td>
+          <td>{{ san_pham.MoTa }}</td>
+          <td>{{ san_pham.Gia }}</td>
+          <td>{{ san_pham.NhanHieu }}</td>
+          <td>{{ san_pham.ChatLieu }}</td>
+          <td>
+            {% if san_pham.HinhAnhDaiDien %}
+            <img
+              src="{{ san_pham.HinhAnhDaiDien }}"
+              alt="{{ san_pham.TenSanPham }}"
+            />
+            {% else %} Không có hình ảnh {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

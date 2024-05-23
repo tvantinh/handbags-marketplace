@@ -1,0 +1,54 @@
+{% extends 'home/LayoutHome.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if messages %}
+    <div class="alert alert-success" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Phần còn lại của nội dung -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <img class="card-img-top img-fluid border rounded shadow" src="{% static 'img/' %}{{ product.HinhAnhDaiDien }}" alt="{{ product.TenSanPham }}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 class="mb-3">{{ product.TenSanPham }}</h2>
+            <h4 class="text-danger mb-3">Giá: <span id="product-price">{{ product.Gia }}</span> đ</h4>
+            <p class="mb-3">{{ product.MoTa }}</p>
+            <div class="mb-3">
+                <p class="font-weight-bold">Chi tiết sản phẩm:</p>
+                <ul class="list-unstyled">
+                    {% for detail in product.chitietsanpham_set.all %}
+                    <li class="mb-2"><span class="text-primary">{{ detail.MauSac }}</span> - Số lượng: <span class="font-weight-bold">{{ detail.SoLuong }}</span></li>
+                    {% endfor %}
+                    <li><span class="font-weight-bold">Thương hiệu:</span> {{ product.NhanHieu }}</li>
+                    <li><span class="font-weight-bold">Chất liệu:</span> {{ product.ChatLieu }}</li>
+                </ul>
+            </div>
+            <form action="{% url 'add_to_cart' product.MaSanPham %}" method="post" class="mb-3">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="quantity" class="font-weight-bold">Số lượng:</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control w-25 d-inline-block" value="1" min="1" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+            </form>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Quay lại danh sách sản phẩm</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var priceElement = document.getElementById("product-price");
+    var price = parseFloat(priceElement.innerText);
+    priceElement.innerText = price.toLocaleString('vi-VN');
+});
+</script>
+{% endblock %}

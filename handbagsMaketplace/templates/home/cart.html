@@ -1,0 +1,68 @@
+{% extends 'home/LayoutHome.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h5 class="text-center">DANH SÁCH SẢN PHẨM TRONG GIỎ HÀNG</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr class="text-center">
+                            <th scope="col">Mã sản phẩm</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Hình ảnh minh họa</th>
+                            <th scope="col">Giá sản phẩm</th>
+                            <th scope="col">Giảm giá</th>
+                            <th scope="col">Số lượng đặt</th>
+                            <th scope="col">Thành tiền</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for icp in cart_items %}
+                            <tr class="text-center">
+                                <td>{{ icp.product.MaSanPham }}</td>
+                                <td>{{ icp.product.TenSanPham }}</td>
+                                <td><img src="{% static 'img/' %}{{ icp.product.HinhAnhDaiDien }}" alt="{{ product.TenSanPham }}" style="max-width: 100px;"></td>
+                                <td>{{ icp.product.Gia }}</td>
+                                <td>{{ icp.product.discount }}</td>
+                                <td>
+                                    <input min="1" max="{{ icp.product.max_amount }}" name="{{ icp.product.MaSanPham }}" class="text-center w-50" type="number" value="{{ icp.quantity }}" />
+                                </td>
+                                <td>{{ icp.item_price }}</td>
+                                <td>
+                                <form action="{% url 'remove_from_cart' icp.product.MaSanPham %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                </form>
+                            </td>
+                            </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-6">
+            <div class="text-right">
+                <p class="font-weight-bold">Tổng số lượng hàng: {{ total_quantity }}</p>
+                <p class="font-weight-bold">Tổng thành tiền: {{ total_price }}</p>
+            </div>
+            <div class="text-right">
+               <a href="{% url 'clear_cart' %}" class="btn btn-danger">Hủy giỏ hàng</a>
+                <form action="{% url 'update_cart' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary mr-2">Cập nhật</button>
+                </form>
+                <a id="submitCart" href="" class="btn btn-success">Tiến hành đặt hàng</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+

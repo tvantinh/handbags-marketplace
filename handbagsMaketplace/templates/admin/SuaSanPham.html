@@ -1,0 +1,14 @@
+<!-- suaSanPham.html -->
+{% extends "admin/layoutAdmin.html" %}
+{% block title %} Sửa sản phẩm {% endblock %}
+{% block content %}
+<div class="container">
+  <h1>Sửa sản phẩm</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a href="{% url 'dssanpham' %}" class="btn btn-secondary">Hủy</a>
+  </form>
+</div>
+{% endblock %}

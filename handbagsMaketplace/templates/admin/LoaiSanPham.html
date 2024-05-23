@@ -1,15 +1,41 @@
-{% extends "admin/layoutAdmin.html" %} {% block title %} Home {% endblock %}
-{%block content %}
+{% extends "admin/layoutAdmin.html" %} {% block title %} Home {% endblock %} {%block content %}
 <div class="container w-100" style="padding-top: 50px">
-  <h1 class="h1">danh sách các loại túi xách</h1>
+  <h1 class="h1">Danh sách các loại túi xách</h1>
 
   <div class="row container">
-    <form action="">
+    <form method="get" action="/handbagsMaketplace/timkiemdanhmuc">
       <div>Nhập tên loại sản phẩm:</div>
-      <input class="title" type="text" value="" placeholder="Tên Loại" />
-      <input type="button" value="Tìm" />
+      <input
+        class="title"
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Tên Loại"
+      />
+      <input type="submit" value="Tìm" />
     </form>
+    {% if ket_qua %}
+    <ul>
+      <table class="table table-bordered table-hover">
+        <thead class="thead-dark bg-secondary">
+          <tr>
+            <td>Mã danh mục</td>
+            <td>Tên danh mục</td>
+          </tr>
+        </thead>
+        {% for danhmuc in ket_qua %}
+        <tr>
+          <td>{{ danhmuc.MaDanhMuc }}</td>
+          <td>{{ danhmuc.TenDanhMuc }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </ul>
+    {% else %}
+    <p>Không tìm thấy sản phẩm nào.</p>
+    {% endif %}
   </div>
+
   <button
     type="button"
     class="btn btn-primary"
@@ -18,6 +44,7 @@
   >
     Thêm loại mới
   </button>
+
   <div class="modal" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -29,14 +56,12 @@
             data-bs-dismiss="modal"
           ></button>
         </div>
-
         <div class="modal-body">
           <form action="/handbagsMaketplace/dsLoaiSanPham" method="post">
             {% csrf_token %} {{ form.as_p }}
             <input type="submit" value="Thêm Loại" />
           </form>
         </div>
-
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
             Close
@@ -45,24 +70,37 @@
       </div>
     </div>
   </div>
-  <table class="table table-bordered table-hover ">
+
+  <table class="table table-bordered table-hover">
     <thead class="thead-dark bg-secondary">
       <tr>
         <td>Mã Loại Sản Phẩm</td>
         <td>Tên Loại</td>
-        <td></td>
+        <td>Hành động</td>
       </tr>
     </thead>
-    {% for tl in handbagsMaketplace_DanhMuc %}
-    <tr>
-      <td>{{tl.id}}</td>
-      <td>{{tl.TenDanhMuc}}</td>
-      <td>
-        <a href="#">xem sach theo theo loai</a>
-      </td>
-    </tr>
-    {% endfor %}
+    <tbody>
+      {% for tl in handbagsMaketplace_DanhMuc %}
+      <tr>
+        <td>{{ tl.MaDanhMuc }}</td>
+        <td>{{ tl.TenDanhMuc }}</td>
+        <td>
+          <form
+            action="{% url 'xoa_danh_muc' tl.MaDanhMuc %}"
+            method="post"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Xóa</button>
+          </form>
+          <a href="{% url 'sua_danh_muc' tl.MaDanhMuc %}" class="btn btn-warning">Sửa</a>
+          <a href="sanpham_theo_loai/{{ tl.MaDanhMuc }}" class="btn btn-warning"
+            >Xem sách theo loại</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
 </div>
-
 {% endblock %}

@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'Contents/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-kit/css/all.min.css' %}">
+    <script src="{% static 'fontawesome-free-kit/js/all.min.js' %}"></script>
+    <script src="{% static 'Scripts/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'Scripts/js/bootstrap.min.js' %}"></script>
+    <style>
+        .breadcrumb a {
+            color: darkslategrey;
+        }
+        .hiddenComp {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainNav" class="container-fluid border-top">
+        <div class="row">
+            <div class="col-12 p-0">
+                <ul class="nav navbar bg-light navbar-light">
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold text-dark" href="{% url 'index' %}">
+                            <i class="fa-solid fa-house"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold text-dark" href="">
+                            <i class="fa-solid fa-compass"></i> Giới thiệu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <button id="btnDropdown" class="btn btn-light dropdown-toggle font-weight-bold" type="button" data-toggle="dropdown">
+                                <i class="fa-solid fa-list"></i> Sản phẩm
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnDropdown">
+
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold text-dark" href="">
+                            <i class="fa-solid fa-chalkboard-user"></i> Hướng dẫn mua hàng
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold text-dark" href="">
+                            <i class="fa-solid fa-phone"></i> Liên hệ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="container-fluid">
+                            <form class="d-flex" method="post" action="">
+                                {% csrf_token %}
+                                <input name="searchtxt" class="form-control mr-2" placeholder="Tìm kiếm sản phẩm" type="text">
+                                <button class="btn btn-outline-dark" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row bg-light border-top border-bottom p-2">
+            <div class="col-3"></div>
+            <div class="col-9 text-right font-weight-bold">
+                {% if user.is_authenticated %}
+                    <p class="font-weight-normal m-0 d-inline">Xin chào, {{ user.user_lastname }} {{ user.user_firstname }}</p>
+                    <p class="font-weight-normal m-0 d-inline">| Điểm tích lũy: {{ user.user_point }}</p>
+                    <p class="font-weight-normal m-0 mr-2 d-inline">
+                        | Hạng: {# UserRanking constants can be defined in your views or models #}
+                        {% if user.user_member_tier == UserRanking.BRONZE %}
+                            <span style="color:#9c3a11"><i class="fa-solid fa-medal"></i> Đồng</span>
+                        {% elif user.user_member_tier == UserRanking.SILVER %}
+                            <span style="color:#aaaaaa"><i class="fa-solid fa-medal"></i> Bạc</span>
+                        {% elif user.user_member_tier == UserRanking.GOLD %}
+                            <span style="color:#e2dd00"><i class="fa-solid fa-medal"></i> Vàng</span>
+                        {% elif user.user_member_tier == UserRanking.PLATINUM %}
+                            <span style="color:#005f9f"><i class="fa-solid fa-medal"></i> Bạch Kim</span>
+                        {% elif user.user_member_tier == UserRanking.DIAMOND %}
+                            <span style="color:#00e6d8"><i class="fa-solid fa-medal"></i> Kim Cương</span>
+                        {% endif %}
+                    </p>
+                    <a class="btn btn-outline-warning" style="width: 115px" href="{% url 'purchase:index' %}"><i class="fa-solid fa-barcode"></i> Đơn hàng</a>
+                    <a class="btn btn-outline-info" style="width: 115px" href="{% url 'cart:index' %}"><i class="fa-solid fa-cart-shopping"></i> Giỏ hàng</a>
+                    <a class="btn btn-outline-primary" style="width: 115px" href="{% url 'user:edit' %}"><i class="fa-solid fa-user"></i> Hồ sơ</a>
+                    <button class="btn btn-outline-danger" style="width: 115px" type="button" data-toggle="modal" data-target="#logOutModal"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
+                {% else %}
+                    <a class="btn btn-outline-info" style="width: 115px" href="{% url 'view_cart' %}"><i class="fa-solid fa-cart-shopping"></i> Giỏ hàng</a>
+                    <a class="btn btn-outline-dark" type="button" href="{% url 'dang_ky' %}" style="width: 115px" data-toggle="modal" data-target="#userLoginModal">Đăng nhập</a>
+                    <a class="btn btn-outline-dark" type="button" href="{% url 'dangnhap' %}" style="width: 115px" data-toggle="modal" data-target="#userRegisterModal">Đăng ký</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-3 mb-3">
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-11 pl-0">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        {% for breadcrumb in breadcrumbs %}
+                            <li class="breadcrumb-item"><a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-9 border-top border-left border-right" style="min-height: 1000px">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="col-2">
+                {% include 'home/sidebar.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid bg-light border-top">
+                <div class="row mt-4">
+                    <div class="col-3">
+                        <div class="container-fluid">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <h5>THÔNG TIN</h5>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Hệ thống cửa hàng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Tuyển dụng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Liên hệ</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="container-fluid">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <h5>TRỢ GIÚP</h5>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Chính sách khách hàng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Phương thức thanh toán</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Chính sách mua hàng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Chính sách giao hàng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Chính sách đổi trả</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Chính sách bảo hành</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="container-fluid">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <h5>THANH TOÁN</h5>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Visa / MasterCard / JCB</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">ATM / Internet Banking / Ví điện tử</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Quét mã QR</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Mua trước trả sau</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Thanh toán COD</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="container-fluid">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <h5>KẾT NỐI VỚI CHÚNG TÔI</h5>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fa-brands fa-facebook fa-2xl"></i> Facebook
+                                    </a>
+                                    <a class="nav-link" style="color: plum" href="#">
+                                        <i class="fa-brands fa-instagram fa-2xl"></i> Instagram
+                                    </a>
+                                    <a class="nav-link text-dark" href="#">
+                                        <i class="fa-brands fa-tiktok fa-2xl"></i> Tiktok
+                                    </a>
+                                    <a class="nav-link text-danger" href="#">
+                                        <i class="fa-brands fa-youtube fa-2xl"></i> Youtube
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container-fluid border lead text-center" style="font-size: 12px">
+                        <p class="m-0">© Copyright {% now "Y" %} Hand Bags Maketplace - All Rights Reserved.
+                        </p>
+                        <p class="m-0">Địa chỉ: 189 - 197, Dương Bá Trạc, Phường 1, Quận 8, TP. Hồ Chí Minh | MST: XXXXXXXXXX</p>
+                        <p class="m-0">Website designed by HuynhTanKiet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#userRegisterModal").on("show.bs.modal", function () {
+                $("#validUsername").removeClass("invisible");
+                $("#validPassword").removeClass("invisible");
+                $("#validRepassword").removeClass("invisible");
+                $("#validEmail").removeClass("invisible");
+                $("#validPhone").removeClass("invisible");
+                $("#validFirst").removeClass("invisible");
+                $("#validLast").removeClass("invisible");
+                $("#validGender").removeClass("invisible");
+                $("#validAddress").removeClass("invisible");
+            });
+            $("#userLoginModal").on("show.bs.modal", function () {
+                $("#validLoginUsername").removeClass("invisible");
+                $("#validLoginPassword").removeClass("invisible");
+            });
+            $("#user_username").keyup(function () {
+                if ($("#user_username").val() === "") {
+                    $("#validUsername").removeClass("invisible");
+                } else {
+                    $("#validUsername").addClass("invisible");
+                }
+            });
+            $("#user_password").keyup(function () {
+                if ($("#user_password").val() === "") {
+                    $("#validPassword").removeClass("invisible");
+                } else {
+                    $("#validPassword").addClass("invisible");
+                }
+            });
+            $("#user_repassword").keyup(function () {
+                if ($("#user_repassword").val() === "") {
+                    $("#validRepassword").removeClass("invisible");
+                } else {
+                    $("#validRepassword").addClass("invisible");
+                }
+            });
+            $("#user_email").keyup(function () {
+                if ($("#user_email").val() === "") {
+                    $("#validEmail").removeClass("invisible");
+                } else {
+                    $("#validEmail").addClass("invisible");
+                }
+            });
+            $("#user_phonenumber").keyup(function () {
+                if ($("#user_phonenumber").val() === "") {
+                    $("#validPhone").removeClass("invisible");
+                } else {
+                    $("#validPhone").addClass("invisible");
+                }
+            });
+            $("#user_firstname").keyup(function () {
+                if ($("#user_firstname").val() === "") {
+                    $("#validFirst").removeClass("invisible");
+                } else {
+                    $("#validFirst").addClass("invisible");
+                }
+            });
+            $("#user_lastname").keyup(function () {
+                if ($("#user_lastname").val() === "") {
+                    $("#validLast").removeClass("invisible");
+                } else {
+                    $("#validLast").addClass("invisible");
+                }
+            });
+            $("input[name='user_gender']").click(function () {
+                if ($("#gender1").is(":checked") || $("#gender2").is(":checked") || $("#gender3").is(":checked")) {
+                    $("#validGender").addClass("invisible");
+                } else {
+                    $("#validGender").removeClass("invisible");
+                }
+            });
+            $("#user_address").keyup(function () {
+                if ($("#user_address").val() === "") {
+                    $("#validAddress").removeClass("invisible");
+                } else {
+                    $("#validAddress").addClass("invisible");
+                }
+            });
+            $("#login_username").keyup(function () {
+                if ($("login_username").val() === "") {
+                    $("#validLoginUsername").removeClass("invisible");
+                } else {
+                    $("#validLoginUsername").addClass("invisible");
+                }
+            });
+            $("#login_password").keyup(function () {
+                if ($("login_password").val() === "") {
+                    $("#validLoginPassword").removeClass("invisible");
+                } else {
+                    $("#validLoginPassword").addClass("invisible");
+                }
+            });
+            $("#userRegisterModal").on("hide.bs.modal", function () {
+                $("#userRegisterForm").trigger("reset");
+            });
+            $("#userLoginModal").on("hide.bs.modal", function () {
+                $("#userLoginForm").trigger("reset");
+            });
+        });
+
+    </script>
+</body>
+</html>

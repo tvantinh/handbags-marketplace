@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static '/bootstrap/css/bootstrap.min.css' %}"
+      type="text/css"
+    />
+</head>
+<body>
+    <div class="container">
+        <h2>Đăng ký</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Đăng ký</button>
+        </form>
+        {% if form.errors %}
+            <p style="color: red;">{{ form.errors }}</p>
+        {% endif %}
+        <p>Nếu bạn đã có tài khoản, vui lòng <a href="{% url 'dangnhap' %}">đăng nhập</a>.</p>
+    </div>
+</body>
+</html>

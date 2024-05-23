@@ -1,0 +1,48 @@
+<div class="container-fluid bg-light rounded border p-0">
+   <ul class="list-group">
+      <li class="list-group-item text-center font-weight-bold">
+         DANH MỤC SẢN PHẨM
+      </li>
+      {% for category in categories %}
+      <li class="list-group-item">
+         <a class="text-dark" href="{% url 'product_by_category' category.MaDanhMuc %}">
+         {{ category.TenDanhMuc }}
+         </a>
+      </li>
+      {% endfor %}
+   </ul>
+</div>
+<div class="container-fluid bg-light rounded mt-3 mb-3 border p-0">
+   <ul class="list-group flex-column">
+      <li class="list-group-item text-center font-weight-bold">
+      </li>
+      <form class="d-flex" method="get" action="{% url 'index' %}">
+      <ul class="list-group">
+          <li class="list-group-item">
+        <input name="min_price" class="form-control mr-2" placeholder="Giá tối thiểu" type="number" min="0">
+          </li>
+          <li class="list-group-item"><input name="max_price" class="form-control mr-2" placeholder="Giá tối đa" type="number" min="0"></li>
+          <li class="list-group-item"> <button class="btn btn-outline-dark" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button></li>
+      </ul>
+
+</form>
+   </ul>
+</div>
+<div class="container-fluid bg-light rounded mt-3 mb-3 border p-0">
+   <ul class="list-group flex-column">
+      <li class="list-group-item text-center font-weight-bold">
+         LIÊN HỆ CHÚNG TÔI
+      </li>
+      <li class="list-group-item">
+         <span>
+         <i class="fa-solid fa-phone"></i> Hotline: <br /> 0367035210 <br />
+         </span>
+         <span>
+         <i class="fa-solid fa-envelope"></i> Email: <br /> devlin.orc@gmail.com<br />
+         </span>
+         <span>
+         <i class="fa-solid fa-location-dot"></i> Address: <br /> 36/13 Đ.160, Lã Xuân Oai, P. Tăng Nhơn Phú A, TP. Thủ Đức, TP. Hồ Chí Minh
+         </span>
+      </li>
+   </ul>
+</div>

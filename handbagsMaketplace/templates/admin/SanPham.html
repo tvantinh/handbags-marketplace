@@ -2,79 +2,130 @@
 {%block content %}
 
 <div class="container w-100" style="padding-top: 50px">
-    <h1 class="h1">Danh sách các sản phẩm túi sách</h1>
+  <h1 class="h1">Danh sách các sản phẩm túi sách</h1>
 
-    <div class="row container">
-        <form action="">
-            <div>Nhập tên sản phẩm:</div>
-            <input class="title" type="text" value="" placeholder="Tên sản phẩm" />
-            <input type="button" value="Tìm" />
-        </form>
-    </div>
-    <button type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#myModal">
-        Thêm sản phẩm mới
-    </button>
-    
-    {% if form.errors %}
-        <div style="color: red;">
-            {{ form.errors }}
-        </div>
-    {% endif %}
-    <div class="modal" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Thêm sản phẩm mới</h4>
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="/handbagsMaketplace/dssanpham" method="post">
-                        {% csrf_token %} {{ form.as_p }}
-                        <input type="submit" value="Thêm sản phẩm" />
-                    </form>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <table class="table table-bordered table-hover ">
+  <div class="row container">
+    <form method="get" action="/handbagsMaketplace/timkiemsanpham">
+      <div>Nhập tên sản phẩm:</div>
+      <input
+        class="title"
+        type="text"
+        name="q"
+        value="{{query}}"
+        placeholder="Tên sản phẩm"
+      />
+      <input type="submit" value="Tìm" />
+    </form>
+    {% if ket_qua %}
+    <ul>
+      <table class="table table-bordered table-hover">
         <thead class="thead-dark bg-secondary">
-            <tr>
-                <td>Mã Sản Phẩm</td>
-                <td>Tên sản phẩm</td>
-                <td>Mô tả</td>
-                <td>Giá</td>
-                <td>Ảnh đại diện</td>
-                <td>Nhãn hiệu</td>
-                <td>Chất liệu</td>
-                <td>Mã danh mục</td>
-            </tr>
+          <tr>
+            <td>Mã Sản Phẩm</td>
+            <td>Tên sản phẩm</td>
+            <td>Mô tả</td>
+            <td>Giá</td>
+            <td>Ảnh đại diện</td>
+            <td>Nhãn hiệu</td>
+            <td>Chất liệu</td>
+            <td>Mã danh mục</td>
+          </tr>
         </thead>
-        {% for tl in handbagsMaketplace_SanPham %}
+        {% for sanpham in ket_qua %}
         <tr>
-            <td>{{tl.id}}</td>
-            <td>{{tl.TenSanPham}}</td>
-            <td>{{tl.MoTa}}</td>
-            <td>{{tl.Gia}}</td>
-            <td>{{tl.HinhAnhDaiDien}}</td>
-            <td>{{tl.NhanHieu}}</td>
-            <td>{{tl.ChatLieu}}</td>
-            <td>
-                {{tl.MaDanhMuc_id}}
-            </td>
+          <td>{{sanpham.MaSanPham}}</td>
+          <td>{{sanpham.TenSanPham}}</td>
+          <td>{{sanpham.MoTa}}</td>
+          <td>{{sanpham.Gia}}</td>
+          <td>{{sanpham.HinhAnhDaiDien}}</td>
+          <td>{{sanpham.NhanHieu}}</td>
+          <td>{{sanpham.ChatLieu}}</td>
+          <td>{{sanpham.MaDanhMuc_id}}</td>
         </tr>
         {% endfor %}
-    </table>
+      </table>
+    </ul>
+    {% else %}
+    <p>Không tìm thấy sản phẩm nào.</p>
+    {% endif %}
+  </div>
+
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#myModal"
+  >
+    Thêm sản phẩm mới
+  </button>
+
+  {% if form.errors %}
+  <div style="color: red">{{ form.errors }}</div>
+  {% endif %}
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Thêm sản phẩm mới</h4>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form action="/handbagsMaketplace/dssanpham" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <input type="submit" value="Thêm sản phẩm" />
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark bg-secondary">
+      <tr>
+        <td>Mã Sản Phẩm</td>
+        <td>Tên sản phẩm</td>
+        <td>Mô tả</td>
+        <td>Giá</td>
+        <td>Ảnh đại diện</td>
+        <td>Nhãn hiệu</td>
+        <td>Chất liệu</td>
+        <td>Mã danh mục</td>
+        <td>Action</td>
+      </tr>
+    </thead>
+    {% for tl in handbagsMaketplace_SanPham %}
+    <tr>
+      <td>{{tl.MaSanPham}}</td>
+      <td>{{tl.TenSanPham}}</td>
+      <td>{{tl.MoTa}}</td>
+      <td>{{tl.Gia}}</td>
+      <td>{{tl.HinhAnhDaiDien}}</td>
+      <td>{{tl.NhanHieu}}</td>
+      <td>{{tl.ChatLieu}}</td>
+      <td>{{tl.MaDanhMuc_id}}</td>
+      <td>
+        <form
+            action="{% url 'xoaSanPham' tl.MaSanPham %}"
+            method="post"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Xóa</button>
+          </form>
+          <a href="{% url 'suaSanPham' tl.MaSanPham %}" class="btn btn-warning">Sửa</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
 </div>
 
 {% endblock %}

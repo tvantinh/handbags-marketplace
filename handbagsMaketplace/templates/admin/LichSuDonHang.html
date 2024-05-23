@@ -1,0 +1,36 @@
+<!-- templates/admin/danh_sach_don_hang.html -->
+{% extends "admin/layoutAdmin.html" %}
+{% block title %} Danh sách đơn hàng {% endblock %}
+{% block content %}
+<div class="container w-100" style="padding-top: 50px">
+  <h1 class="h1">Danh sách các đơn hàng đã hoàn thành</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark bg-secondary">
+      <tr>
+        <td>Mã Đơn Hàng</td>
+        <td>Mã Khách Hàng</td>
+        <td>Ngày Đặt Hàng</td>
+        <td>Tổng Tiền</td>
+        <td>Địa Chỉ Giao Hàng</td>
+        <td>Trạng Thái</td>
+        <td>Mã Khuyến Mãi</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dh in handbagsMaketplace_DonHang %}
+      <tr>
+        <td>{{ dh.MaDonHang }}</td>
+        <td>{{ dh.MaKhachHang }}</td>
+        <td>{{ dh.NgayDatHang }}</td>
+        <td>{{ dh.TongTien }}</td>
+        <td>{{ dh.DiaChiGiaoHang }}</td>
+        <td>{{ dh.MaKhuyenMai }}</td>
+        <td>
+          
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
