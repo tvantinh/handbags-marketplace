@@ -77,7 +77,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form action="/handbagsMaketplace/dssanpham" method="post">
+          <form action="/handbagsMaketplace/dssanpham" method="post" enctype="multipart/form-data">
             {% csrf_token %} {{ form.as_p }}
             <input type="submit" value="Thêm sản phẩm" />
           </form>
