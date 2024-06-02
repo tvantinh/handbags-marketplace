@@ -1,5 +1,5 @@
 from django.shortcuts import render # type: ignore
-from django.http import HttpResponse, HttpResponseRedirect# type: ignore
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse# type: ignore
 from handbagsMaketplace.forms import DanhMucForm, SanPhamForm,DangKyForm, DangNhapForm# type: ignore
 from .models import DanhMuc,SanPham,ChiTietSanPham,DonHang,KhachHang
 from django.shortcuts import render, get_object_or_404, redirect # type: ignore
@@ -21,17 +21,17 @@ def dstkkh(request):
 
 def lichSuDonHang(request):
     data = {
-		'handbagsMaketplace_donhang' : DonHang.objects.filter(TrangThai=True),
+		'handbagsMaketplace_donhang' : DonHang.objects.filter(TrangThai=1),
 
 	}
     return render(request, 'admin/LichSuDonHang.html',data)
 
 def dsDonHang(request):
     data = {
-		'handbagsMaketplace_donhang' : DonHang.objects.filter(TrangThai=False),
+		'handbagsMaketplace_donhang' : DonHang.objects.filter(TrangThai=0),
 
 	}
-    return render(request, 'admin/LichSuDonHang.html',data)
+    return render(request, 'admin/DonHangDangXuLy.html',data)
 
 def loai_san_pham(request):
     form = DanhMucForm()
@@ -61,11 +61,16 @@ def san_pham(request):
     if request.method=='POST':
         form=SanPhamForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/handbagsMaketplace/dssanpham')
+            san_pham_instance = form.save()
+            data = {
+                "name": san_pham_instance.TenSanPham
+            }
+            return JsonResponse(data, status=200) 
+    SP= SanPham.objects.all().values('MaSanPham','MaDanhMuc','TenSanPham','MoTa','Gia','HinhAnhDaiDien','NhanHieu','ChatLieu')
+    ListSP = list(SP)
     data={
         'form':form,
-        'handbagsMaketplace_SanPham':SanPham.objects.all(),
+        'handbagsMaketplace_SanPham':ListSP,
     }
     return render(request,'admin/SanPham.html',data)
 

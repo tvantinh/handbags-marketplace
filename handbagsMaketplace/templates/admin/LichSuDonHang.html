@@ -17,17 +17,16 @@
       </tr>
     </thead>
     <tbody>
-      {% for dh in handbagsMaketplace_DonHang %}
+      {% for dh in handbagsMaketplace_donhang %}
       <tr>
         <td>{{ dh.MaDonHang }}</td>
         <td>{{ dh.MaKhachHang }}</td>
         <td>{{ dh.NgayDatHang }}</td>
         <td>{{ dh.TongTien }}</td>
         <td>{{ dh.DiaChiGiaoHang }}</td>
+        <td>{{ dh.TrangThai|yesno:"Đã hoàn thành,Chưa hoàn thành" }}</td>
         <td>{{ dh.MaKhuyenMai }}</td>
-        <td>
-          
-        </td>
+        
       </tr>
       {% endfor %}
     </tbody>
